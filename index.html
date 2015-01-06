@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OpenWS Examples</title>
+
+  <style>
+    html{
+      height: 100%;
+      border-left: 12px solid #fa492b;
+    }
+    body{
+      font-family: arial;
+      width: 70%;
+      margin: auto;
+    }
+    input[type="text"], input[type="password"]{
+      padding: 8px;
+    }
+    input[type="button"]{
+      padding: 10px 15px;
+      border: 1px solid #fa492b;
+      background-color: transparent;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    input[type="button"]:hover{
+      background-color: #fa492b;
+      color: white;
+    }
+  </style>
+
+  <script>
+
+    // Your API Key
+    var key = "",
+
+    // Your collection
+        collection = "user",
+
+    // OpenWS URL
+        url = "https://openws.herokuapp.com/";
+
+    window.openws = {
+
+      initialize: function(){
+
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+          xmlhttp = new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+          xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+      },
+
+      get: function(){
+
+        var msg = document.getElementById("msg_check"),
+            user = document.getElementById("user_check");
+
+        msg.innerHTML = "Loading...";
+
+        if (user.value == ""){
+          msg.innerHTML = "";
+          return;
+        }
+
+        this.initialize();
+
+        xmlhttp.onreadystatechange = function()
+        {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+          {
+            console.log(xmlhttp.responseText);
+            msg.innerHTML = "Great, take a look at your browser console.";
+          }
+        }
+
+        var obj = JSON.stringify({
+          name: user.value
+        });
+
+        xmlhttp.open("GET", url + collection + "?q=" + obj + "&apiKey=" + key, true);
+        xmlhttp.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+        xmlhttp.send();
+
+      },
+
+      save: function(){
+
+        var user = document.getElementById("user"),
+            password = document.getElementById("password"),
+            msg = document.getElementById("msg_save");
+
+        msg.innerHTML = "Loading...";
+
+        if (user.value == "" || password.value == ""){
+          msg.innerHTML = "";
+          return;
+        }
+
+        this.initialize();
+
+        xmlhttp.onreadystatechange = function()
+        {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 201)
+          {
+            console.log(xmlhttp.responseText);
+            msg.innerHTML = "Cool, your user has been added. Take a look at your browser console.";
+          }
+        }
+
+        var obj = JSON.stringify({
+          name: document.getElementById("user").value,
+          password: document.getElementById("password").value
+        });
+
+        xmlhttp.open("POST", url + collection + "?apiKey=" + key, true);
+        xmlhttp.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+        xmlhttp.send(obj);
+
+      },
+
+      delete: function(){
+
+        var id = document.getElementById("id"),
+            msg = document.getElementById("msg_delete");
+
+        msg.innerHTML = "Loading...";
+
+        if (id.value == ""){
+          msg.innerHTML = "";
+          return;
+        }
+
+        this.initialize();
+
+        xmlhttp.onreadystatechange = function()
+        {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+          {
+            console.log(xmlhttp.responseText);
+            msg.innerHTML = "Ok, your user has been deleted. Take a look at your browser console.";
+          }
+        }
+
+        xmlhttp.open("DELETE", url + collection + "/" + id.value + "?apiKey=" + key, true);
+        xmlhttp.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+        xmlhttp.send();
+
+      },
+
+      count: function(){
+
+        var id = document.getElementById("id"),
+            msg = document.getElementById("msg_count");
+
+        msg.innerHTML = "Loading...";
+
+        this.initialize();
+
+        xmlhttp.onreadystatechange = function()
+        {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+          {
+            var json = JSON.parse(xmlhttp.responseText);
+
+            console.log(json.length);
+
+            msg.innerHTML = "Done! Take a look at your browser console.";
+          }
+        }
+
+        xmlhttp.open("GET", url + collection + "?apiKey=" + key, true);
+        xmlhttp.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+        xmlhttp.send();
+
+      },
+
+      count2: function(){
+
+        var id = document.getElementById("id"),
+            msg = document.getElementById("msg_count2");
+
+        msg.innerHTML = "Loading...";
+
+        this.initialize();
+
+        xmlhttp.onreadystatechange = function()
+        {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+          {
+            var json = JSON.parse(xmlhttp.responseText),
+                count = 0;
+
+            for (var i in json){
+              if (json[i].name.toLowerCase().indexOf("a") > -1){
+                count++;
+              }
+            }
+
+            console.log(count);
+
+            msg.innerHTML = "Done! Take a look at your browser console.";
+          }
+        }
+
+        xmlhttp.open("GET", url + collection + "?apiKey=" + key, true);
+        xmlhttp.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+        xmlhttp.send();
+
+      }
+
+    }
+  </script>
+
+</head>
+
+<body>
+
+  <h1>OpenWS Examples</h1>
+
+  <h3>Create a user</h3>
+  <input id="user" type="text" placeholder="Username" />
+  <input id="password" type="password" placeholder="Password" />
+  <input id="save" type="button" value="Save" onclick="openws.save();" />
+  <label id="msg_save"></label>
+
+  <br /><br />
+
+  <h3>Check if a user exist</h3>
+  <input id="user_check" type="text" placeholder="Username" />
+  <input id="check" type="button" value="Check" onclick="openws.get();" />
+  <label id="msg_check"></label>
+
+  <br /><br />
+
+  <h3>Delete a user</h3>
+  <input id="id" type="text" placeholder="Id" />
+  <input id="delete" type="button" value="Delete" onclick="openws.delete();" />
+  <label id="msg_delete"></label>
+
+  <br /><br />
+
+  <h3>How many users do I have?</h3>
+  <input id="count" type="button" value="Count" onclick="openws.count();" />
+  <label id="msg_count"></label>
+
+  <br /><br />
+
+  <h3>How many users do I have that contains the letter A?</h3>
+  <input id="count2" type="button" value="Count" onclick="openws.count2();" />
+  <label id="msg_count2"></label>
+
+</body>
+
+</html>
