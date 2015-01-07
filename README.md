@@ -8,8 +8,8 @@ A simple HTML page with some examples using OpenWS.
 - How many users do I have?
 - How many users do I have that contains the letter A?
 
-#Contribute
+##Contribute
 Contributions are welcome.
 
-#Official Website
+##Official Website
 https://openws-app.herokuapp.com
