@@ -31,14 +31,10 @@
 
   <script type="text/javascript">
 
-    // Your API Key
-    var key = "",
 
-    // Your collection
-        collection = "user",
-
-    // OpenWS URL
-        url = "https://openws.herokuapp.com/";
+    var key = "e4c1feb27cb969b7beba54c004cea8eb", // Your API Key
+        collection = "user", // Your collection
+        url = "https://openws.herokuapp.com/"; // OpenWS URL
 
     window.openws = {
 
@@ -52,6 +48,41 @@
         {// code for IE6, IE5
           xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
         }
+
+      },
+
+      save: function(){
+
+        var user = document.getElementById("user"),
+            password = document.getElementById("password"),
+            msg = document.getElementById("msg_save");
+
+        msg.innerHTML = "Loading...";
+
+        if (user.value == "" || password.value == ""){
+          msg.innerHTML = "";
+          return;
+        }
+
+        this.initialize();
+
+        xmlhttp.onreadystatechange = function()
+        {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 201)
+          {
+            console.log(xmlhttp.responseText);
+            msg.innerHTML = "Cool, your user has been added. Take a look at your browser console.";
+          }
+        }
+
+        var obj = JSON.stringify({
+          name: user.value,
+          password: password.value
+        });
+
+        xmlhttp.open("POST", url + collection + "?apiKey=" + key, true);
+        xmlhttp.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+        xmlhttp.send(obj);
 
       },
 
@@ -88,15 +119,15 @@
 
       },
 
-      save: function(){
+      update: function(){
 
-        var user = document.getElementById("user"),
-            password = document.getElementById("password"),
-            msg = document.getElementById("msg_save");
+        var id = document.getElementById("id_update"),
+            user = document.getElementById("user_update"),
+            msg = document.getElementById("msg_update");
 
         msg.innerHTML = "Loading...";
 
-        if (user.value == "" || password.value == ""){
+        if (id.value == "" || user.value == ""){
           msg.innerHTML = "";
           return;
         }
@@ -105,19 +136,18 @@
 
         xmlhttp.onreadystatechange = function()
         {
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 201)
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
           {
             console.log(xmlhttp.responseText);
-            msg.innerHTML = "Cool, your user has been added. Take a look at your browser console.";
+            msg.innerHTML = "Yeah, your user has been updated. Take a look at your browser console.";
           }
         }
 
         var obj = JSON.stringify({
-          name: document.getElementById("user").value,
-          password: document.getElementById("password").value
+          name: user.value
         });
 
-        xmlhttp.open("POST", url + collection + "?apiKey=" + key, true);
+        xmlhttp.open("PUT", url + collection + "/" + id.value + "?apiKey=" + key, true);
         xmlhttp.setRequestHeader("Content-Type", "application/json; charset=utf-8");
         xmlhttp.send(obj);
 
@@ -125,7 +155,7 @@
 
       delete: function(){
 
-        var id = document.getElementById("id"),
+        var id = document.getElementById("id_delete"),
             msg = document.getElementById("msg_delete");
 
         msg.innerHTML = "Loading...";
@@ -237,8 +267,16 @@
 
   <br /><br />
 
+  <h3>Update a user</h3>
+  <input id="id_update" type="text" placeholder="Id" />
+  <input id="user_update" type="text" placeholder="New Username" />
+  <input id="update" type="button" value="Update" onclick="openws.update();" />
+  <label id="msg_update"></label>
+
+  <br /><br />
+
   <h3>Delete a user</h3>
-  <input id="id" type="text" placeholder="Id" />
+  <input id="id_delete" type="text" placeholder="Id" />
   <input id="delete" type="button" value="Delete" onclick="openws.delete();" />
   <label id="msg_delete"></label>
 
