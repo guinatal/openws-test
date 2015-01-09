@@ -13,11 +13,17 @@
       width: 70%;
       margin: auto;
     }
-    input[type="text"], input[type="password"]{
+    #msg{
+      color: white;
+      background-color: #fa492b;
       padding: 8px;
+      border-radius: 0 0 5px 5px;
+    }
+    input[type="text"], input[type="password"]{
+      padding: 4px;
     }
     input[type="button"]{
-      padding: 10px 15px;
+      padding: 5px 10px;
       border: 1px solid #fa492b;
       background-color: transparent;
       cursor: pointer;
@@ -31,9 +37,15 @@
 
   <script type="text/javascript">
 
-    var key = "", // Your API Key - Example: "e4c1feb27cb969b7beba54c004cea8eb"
+    var key = "e4c1feb27cb969b7beba54c004cea8eb", // Your API Key - Example: "e4c1feb27cb969b7beba54c004cea8eb"
         collection = "user", // Your collection
         url = "https://openws.herokuapp.com/"; // OpenWS URL
+
+    function msg(message){
+      var field = document.getElementById("msg");
+      field.style.display = "block";
+      field.innerHTML = message;
+    }
 
     window.openws = {
 
@@ -53,13 +65,12 @@
       save: function(){
 
         var user = document.getElementById("user"),
-            password = document.getElementById("password"),
-            msg = document.getElementById("msg_save");
+            password = document.getElementById("password");
 
-        msg.innerHTML = "Loading...";
+        msg("Loading...");
 
         if (user.value == "" || password.value == ""){
-          msg.innerHTML = "";
+          msg("All the fields are required.");
           return;
         }
 
@@ -70,7 +81,7 @@
           if (xmlhttp.readyState == 4 && xmlhttp.status == 201)
           {
             console.log(xmlhttp.responseText);
-            msg.innerHTML = "Cool, your user has been added. Take a look at your browser console.";
+            msg("Cool, your user has been added. Take a look at your browser console.");
           }
         }
 
@@ -87,13 +98,12 @@
 
       get: function(){
 
-        var msg = document.getElementById("msg_check"),
-            user = document.getElementById("user_check");
+        var user = document.getElementById("user_check");
 
-        msg.innerHTML = "Loading...";
+        msg("Loading...");
 
         if (user.value == ""){
-          msg.innerHTML = "";
+          msg("All the fields are required.");
           return;
         }
 
@@ -104,7 +114,7 @@
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
           {
             console.log(xmlhttp.responseText);
-            msg.innerHTML = "Great, take a look at your browser console.";
+            msg("Great, take a look at your browser console.");
           }
         }
 
@@ -121,13 +131,12 @@
       update: function(){
 
         var id = document.getElementById("id_update"),
-            user = document.getElementById("user_update"),
-            msg = document.getElementById("msg_update");
+            user = document.getElementById("user_update");
 
-        msg.innerHTML = "Loading...";
+        msg("Loading...");
 
         if (id.value == "" || user.value == ""){
-          msg.innerHTML = "";
+          msg("All the fields are required.");
           return;
         }
 
@@ -138,7 +147,7 @@
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
           {
             console.log(xmlhttp.responseText);
-            msg.innerHTML = "Yeah, your user has been updated. Take a look at your browser console.";
+            msg("Yeah, your user has been updated. Take a look at your browser console.");
           }
         }
 
@@ -154,13 +163,12 @@
 
       delete: function(){
 
-        var id = document.getElementById("id_delete"),
-            msg = document.getElementById("msg_delete");
+        var id = document.getElementById("id_delete");
 
-        msg.innerHTML = "Loading...";
+        msg("Loading...");
 
         if (id.value == ""){
-          msg.innerHTML = "";
+          msg("All the fields are required.");
           return;
         }
 
@@ -171,7 +179,7 @@
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
           {
             console.log(xmlhttp.responseText);
-            msg.innerHTML = "Ok, your user has been deleted. Take a look at your browser console.";
+            msg("Ok, your user has been deleted. Take a look at your browser console.");
           }
         }
 
@@ -183,10 +191,9 @@
 
       count: function(){
 
-        var id = document.getElementById("id"),
-            msg = document.getElementById("msg_count");
+        var id = document.getElementById("id");
 
-        msg.innerHTML = "Loading...";
+        msg("Loading...");
 
         this.initialize();
 
@@ -198,7 +205,7 @@
 
             console.log(json.length);
 
-            msg.innerHTML = "Done! Take a look at your browser console.";
+            msg("Done! Take a look at your browser console.");
           }
         }
 
@@ -210,10 +217,9 @@
 
       count2: function(){
 
-        var id = document.getElementById("id"),
-            msg = document.getElementById("msg_count2");
+        var id = document.getElementById("id");
 
-        msg.innerHTML = "Loading...";
+        msg("Loading...");
 
         this.initialize();
 
@@ -232,7 +238,7 @@
 
             console.log(count);
 
-            msg.innerHTML = "Done! Take a look at your browser console.";
+            msg("Done! Take a look at your browser console.");
           }
         }
 
@@ -249,20 +255,20 @@
 
 <body>
 
+  <div id="msg" style="display:none"></div>
+
   <h1>OpenWS Examples</h1>
 
   <h3>Create a user</h3>
   <input id="user" type="text" placeholder="Username" />
   <input id="password" type="password" placeholder="Password" />
   <input id="save" type="button" value="Save" onclick="openws.save();" />
-  <label id="msg_save"></label>
 
   <br /><br />
 
   <h3>Check if a user exist</h3>
   <input id="user_check" type="text" placeholder="Username" />
   <input id="check" type="button" value="Check" onclick="openws.get();" />
-  <label id="msg_check"></label>
 
   <br /><br />
 
@@ -270,26 +276,22 @@
   <input id="id_update" type="text" placeholder="Id" />
   <input id="user_update" type="text" placeholder="New Username" />
   <input id="update" type="button" value="Update" onclick="openws.update();" />
-  <label id="msg_update"></label>
 
   <br /><br />
 
   <h3>Delete a user</h3>
   <input id="id_delete" type="text" placeholder="Id" />
   <input id="delete" type="button" value="Delete" onclick="openws.delete();" />
-  <label id="msg_delete"></label>
 
   <br /><br />
 
   <h3>How many users do I have?</h3>
   <input id="count" type="button" value="Count" onclick="openws.count();" />
-  <label id="msg_count"></label>
 
   <br /><br />
 
   <h3>How many users do I have that contains the letter A?</h3>
   <input id="count2" type="button" value="Count" onclick="openws.count2();" />
-  <label id="msg_count2"></label>
 
 </body>
 

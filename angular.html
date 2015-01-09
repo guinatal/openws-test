@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+
+  <title>OpenWS Angular Examples</title>
+
+  <!-- Angular -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
+
+  <style type="text/css">
+    html{
+      height: 100%;
+      border-left: 12px solid #fa492b;
+    }
+    body{
+      font-family: arial;
+      width: 70%;
+      margin: auto;
+    }
+    #msg{
+      color: white;
+      background-color: #fa492b;
+      padding: 8px;
+      border-radius: 0 0 5px 5px;
+    }
+    input[type="text"], input[type="password"]{
+      padding: 4px;
+    }
+    input[type="button"]{
+      padding: 5px 10px;
+      border: 1px solid #fa492b;
+      background-color: transparent;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    input[type="button"]:hover{
+      background-color: #fa492b;
+      color: white;
+    }
+  </style>
+
+  <script type="text/javascript">
+
+    var key = "", // Your API Key - Example: "e4c1feb27cb969b7beba54c004cea8eb"
+        collection = "user", // Your collection
+        url = "https://openws.herokuapp.com/"; // OpenWS URL
+
+    function msg(message){
+      var field = document.getElementById("msg");
+      field.style.display = "block";
+      field.innerHTML = message;
+    }
+
+    /* Angular */
+
+    var myApp = angular.module('myApp', []);
+
+    myApp.controller('myController', function ($scope, $http) {
+
+      $scope.list = function(){
+
+        msg("Loading...");
+
+        var responsePromise = $http.get(url + collection + "?apiKey=" + key);
+
+        responsePromise.success(function(data, status, headers, config) {
+          msg("Done!");
+          $scope.users = data;
+        });
+
+      }
+
+    });
+  </script>
+
+</head>
+
+<body ng-controller="myController">
+
+  <div id="msg" style="display:none"></div>
+
+  <h1>OpenWS Angular Examples</h1>
+
+  <h3>User list</h3>
+  <input id="list" type="button" value="List" ng-click="list();" />
+
+  <br /><br />
+
+  <table>
+    <tr ng-repeat="user in users">
+      <td>{{ user.name }}</td>
+    </tr>
+  </table>
+
+</body>
+
+</html>
