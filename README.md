@@ -1,6 +1,6 @@
 #OpenWS Examples
 
-A simple HTML page with some examples using OpenWS.
+<b>index.html:</b> A simple HTML page and pure javascript
 
 - Create a user
 - Check if a user exist
@@ -8,6 +8,10 @@ A simple HTML page with some examples using OpenWS.
 - Delete a user
 - How many users do I have?
 - How many users do I have that contains the letter A?
+
+<b>angular.html:</b> A simples HTML page and AngularJS
+
+- User list
 
 ###Contribute
 Contributions are welcome.
