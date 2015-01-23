@@ -9,7 +9,7 @@
 - How many users do I have?
 - How many users do I have that contains the letter A?
 
-<b>angular</b> OpenWS and AngularJS together
+<b>angular:</b> Some examples using OpenWS and AngularJS
 
 - User List
 - Create a user
