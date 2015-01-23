@@ -9,9 +9,10 @@
 - How many users do I have?
 - How many users do I have that contains the letter A?
 
-<b>angular.html:</b> A simples HTML page and AngularJS
+<b>angular</b> OpenWS and AngularJS together
 
-- User list
+- User List
+- Create a user
 
 ###Contribute
 Contributions are welcome.
