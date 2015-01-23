@@ -38,10 +38,6 @@
       background-color: #fa492b;
       color: white;
     }
-    table tr{
-      padding: 5px;
-      border-bottom: 1px solid lightGrey;
-    }
   </style>
 
   <script type="text/javascript">
@@ -56,15 +52,18 @@
 
     myApp.controller('myController', function ($scope, $http) {
 
-      $scope.list = function(){
+      $scope.master = {};
+
+      $scope.save = function(){
 
         this.msg = "Loading...";
 
-        var responsePromise = $http.get(url + collection + "?apiKey=" + key);
+        var responsePromise = $http.post(url + collection + "?apiKey=" + key, this.user);
 
         responsePromise.success(function(data, status, headers, config) {
+          $scope.user = angular.copy($scope.master);
           $scope.msg = "Done!";
-          $scope.users = data;
+          $scope.link = true;
         });
 
       }
@@ -78,22 +77,20 @@
 
   <div id="msg">{{ msg }}</div>
 
-  <h1>OpenWS Angular List</h1>
+  <h1>OpenWS Angular Create</h1>
 
-  <form ng-submit="list();">
-    <h3>User list</h3>
-    <input type="submit" value="List" />
+  <form name="myForm" ng-submit="myForm.$valid && save();" novalidate>
+    <h3>Create a user</h3>
+    <input ng-model="user.name" type="text" placeholder="Username" required />
+    <input ng-model="user.password" type="password" placeholder="Password" required />
+    <input type="submit" value="Save" />
   </form>
 
   <br />
 
-  <p ng-show="users"><strong>Users: {{ users.length }}</strong></p>
+  <p>{{ user.name }}</p>
 
-  <table ng-show="users">
-    <tr ng-repeat="user in users">
-      <td>{{ user.name }}</td>
-    </tr>
-  </table>
+  <p ng-show="link">Now you can see your user clicking <a href="list.html">here</a></p>
 
 </body>
 

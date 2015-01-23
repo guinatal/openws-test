@@ -16,7 +16,7 @@
     #msg{
       color: white;
       background-color: #fa492b;
-      padding: 8px;
+      padding: 5px;
       border-radius: 0 0 5px 5px;
     }
     input[type="text"], input[type="password"]{
@@ -37,13 +37,12 @@
 
   <script type="text/javascript">
 
-    var key = "e4c1feb27cb969b7beba54c004cea8eb", // Your API Key - Example: "e4c1feb27cb969b7beba54c004cea8eb"
+    var key = "", // Your API Key - Example: "e4c1feb27cb969b7beba54c004cea8eb"
         collection = "user", // Your collection
         url = "https://openws.herokuapp.com/"; // OpenWS URL
 
     function msg(message){
       var field = document.getElementById("msg");
-      field.style.display = "block";
       field.innerHTML = message;
     }
 
@@ -255,7 +254,7 @@
 
 <body>
 
-  <div id="msg" style="display:none"></div>
+  <div id="msg">:)</div>
 
   <h1>OpenWS Examples</h1>
 
